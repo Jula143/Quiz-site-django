@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>When you're ready start the quiz</title>
+</head>
+<body>
+{% extends "base.html" %} {% block content %}
+<h1>Category: {{category}}</h1>
+
+<form method="post" action="/quiz/{{category}}/">
+    {% csrf_token %}
+        <p>When you start the quiz, the timer will start. Please answer every <br>
+        question and submit your answers before the timer runs out.</p>
+        <input type="number" name="number" placeholder="Number of questions" min="1" max="5" required="required">
+    <button type="submit" name="submit">Start</button>
+</form>
+    {% endblock %}
+
+</body>
+</html>

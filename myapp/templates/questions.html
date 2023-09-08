@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is your list of questions</title>
+    <style type="text/css">
+        .timer{
+            width: 130px;
+            background-color: #7393B3;
+            padding: 2px 5px 2px 5px;
+            border: 3px solid #000000;
+            position: fixed;
+            right: 400px;
+        }
+        .questions{
+            width: 700px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+{% extends "base.html" %} {% block content %}
+<h1>Category: {{category}}</h1>
+
+ <div class="timer" id="timer">
+        <p>Time Left: <span id="countdown"></span></p>
+ </div>
+
+<form method="post" action="/check/{{category}}/" id="quiz-form">
+    {% csrf_token %}
+    <div class="questions">
+        <ul>
+            {% for q in questions %}
+                <li>
+                    <div> {{ q.question }} </div>
+                    <input type="text" name="answer_{{q.id}}" placeholder="Enter your answer">
+               </li>
+            <br>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit" name="submitButton">Submit answers</button>
+</form>
+
+    <script>
+        // Set the target date for the countdown (change this to your desired date and time)
+        const date = new Date();
+        const numberOfQuestions = {{ questions|length }};
+        date.setSeconds(date.getSeconds() + 30*numberOfQuestions+1); // Add 30 seconds to the current date
+        const targetDate = date.getTime();
+
+        // Update the countdown every second
+        const countdownInterval = setInterval(function () {
+            const currentDate = new Date().getTime();
+            const timeRemaining = targetDate - currentDate;
+
+            if (timeRemaining <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = 'Countdown expired!';
+                document.getElementById('quiz-form').submit(); // Submit the form
+            } else {
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').innerHTML = `${minutes}m ${seconds}s`;
+            }
+        }, 1000);
+    </script>
+
+    {% endblock %}
+
+</body>
+
+</html>
+
+
+
+

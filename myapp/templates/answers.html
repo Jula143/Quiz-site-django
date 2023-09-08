@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Answer page</title>
+    <style type="text/css">
+        .questions{
+            width: 700px;
+            font-size: 20px;
+        }
+        input[type="text"], textarea {
+            background-color : #55d51;
+        }
+    </style>
+</head>
+<body>
+{% extends "base.html" %} {% block content %}
+<h1>Category: {{category}}</h1>
+<p>Congrats! You've completed the quiz! <br>
+    Your score was: {{score}}/{{ answers|length }}<br>
+    You can now check your answers.</p>
+
+    <div class="questions">
+        <ul>
+            {% for question, answer in answers.items %}
+                <li>
+                    <div> {{ question.question }} </div>
+                    {% if question.answer|lower == answer|lower %}
+                        <input type="text" name="answer_{{ question.id }}" value="{{ answer }}" disabled="disabled" style="color: #002800; background-color: #90EE90;">
+                    {% else %}
+                        <input type="text" name="answer_{{ question.id }}" value="{{ answer }}" disabled="disabled" style="color: #8B0000; background-color: #FFCCCB;">
+                        <span style="color: #ff0000;">Correct Answer: {{ question.answer }}</span>
+                    {% endif %}
+               </li>
+            <br>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+</body>
+
+</html>
+
+
+
+
